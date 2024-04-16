@@ -8,9 +8,10 @@ import { AbstractMob } from "../game/AbstractMob";
 
 export class GameScene extends Container implements IUpdateable {
 
+    private static readonly ENEMY_SPAWN_TIME : number = 6;
     private enemies : AbstractMob[] = [];
     private player : Player = new Player();
-    private counter : number = 0;
+    private enemySpawnCounter : number = 0;
 
     constructor() {
         super();
@@ -27,23 +28,23 @@ export class GameScene extends Container implements IUpdateable {
         if(!this.player.destroyed) {
             const deltaSeconds = deltaTime / 1000;
 
-            this.counter += deltaSeconds;
+            this.enemySpawnCounter += deltaSeconds;
 
-            if(this.counter >= 5) {
+            if(this.enemySpawnCounter >= GameScene.ENEMY_SPAWN_TIME) {
                 this.addEnemy();
-                this.counter = 0;
+                this.enemySpawnCounter = 0;
             }
             
             this.player.move(deltaSeconds);
 
-            this.enemies.forEach(enemy => {
-
+            for (const enemy of this.enemies) {
                 enemy.move(deltaSeconds);
 
                 if(are_colliding(this.player, enemy)) {
                     this.player.destroy();
+                    break;
                 }
-            });
+            }
         }
         
     }
