@@ -54,7 +54,7 @@ export class Player extends AbstractMob {
         return Player.SIZE;
     }
 
-    override keepWithinBounds(): void {
+    private keepWithinBounds(): void {
         if(this.x > GAME_WIDTH - Player.SIZE) {
             this.x = GAME_WIDTH - Player.SIZE;
         } else if (this.x < 0 + Player.SIZE) {

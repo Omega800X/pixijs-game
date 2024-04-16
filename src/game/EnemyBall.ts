@@ -32,7 +32,7 @@ export class EnemyBall extends AbstractMob {
         return EnemyBall.SIZE;
     }
 
-    override keepWithinBounds(): void {
+    private keepWithinBounds(): void {
         if(this.x > GAME_WIDTH - EnemyBall.SIZE) {
             this.x = GAME_WIDTH - EnemyBall.SIZE;
             this.speed.x = Math.abs(this.speed.x) * -1;
