@@ -10,7 +10,6 @@ export class GameScene extends Container implements IUpdateable {
 
     private enemies : AbstractMob[] = [];
     private player : Player = new Player();
-    private gameResult : number = 0;
     private counter : number = 0;
 
     constructor() {
@@ -25,34 +24,28 @@ export class GameScene extends Container implements IUpdateable {
 
     update(deltaTime: number, _deltaFrame?: number | undefined): void {
         
-        switch(this.gameResult) {
-            case 0:
-                const deltaSeconds = deltaTime / 1000;
+        if(!this.player.destroyed) {
+            const deltaSeconds = deltaTime / 1000;
 
-                this.counter += deltaSeconds;
-    
-                if(this.counter >= 5) {
-                    this.addEnemy();
-                    this.counter = 0;
+            this.counter += deltaSeconds;
+
+            if(this.counter >= 5) {
+                this.addEnemy();
+                this.counter = 0;
+            }
+            
+            this.player.move(deltaSeconds);
+
+            this.enemies.forEach(enemy => {
+
+                enemy.move(deltaSeconds);
+
+                if(are_colliding(this.player, enemy)) {
+                    this.player.destroy();
                 }
-                
-                this.player.move(deltaSeconds);
-    
-                this.enemies.forEach(enemy => {
-    
-                    enemy.move(deltaSeconds);
-    
-                    if(are_colliding(this.player, enemy)) {
-                        this.player.destroy();
-                        this.gameResult = -1;
-                    }
-                });
-                break;
-            case 1:
-                break;
-            case -1:
-                break;
+            });
         }
+        
     }
 
     private addEnemy() : void {
