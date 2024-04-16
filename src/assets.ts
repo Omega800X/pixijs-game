@@ -6,7 +6,8 @@ export const manifest : AssetsManifest = {
             name: "assets",
             assets:
             {
-                "Ball" : "./ball.png",
+                "Skull" : "./skull.png",
+                "Minercraftory" : "./fonts/Minercraftory.ttf"
             }
         },
     ]
