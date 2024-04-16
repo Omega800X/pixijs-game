@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js'
+import { Application, Ticker } from 'pixi.js'
 import { GAME_BACKGROUND_COLOR, GAME_HEIGHT, GAME_WIDTH } from './utils/constants';
 import { Keyboard } from './utils/Keyboard';
 import { initialize_assets } from './assets';
@@ -10,7 +10,7 @@ const app = new Application<HTMLCanvasElement>({
 	autoDensity: true,
 	backgroundColor: GAME_BACKGROUND_COLOR,
 	width: GAME_WIDTH,
-	height: GAME_HEIGHT
+	height: GAME_HEIGHT,
 });
 
 Keyboard.initialize();
@@ -44,4 +44,8 @@ initialize_assets().then(() => {
 	const currentScene = new GameScene();
 
 	app.stage.addChild(currentScene);
+
+	Ticker.shared.add(function (deltaFrame) {
+		currentScene.update(Ticker.shared.deltaMS, deltaFrame);
+	});
 });
