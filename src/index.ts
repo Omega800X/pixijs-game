@@ -2,7 +2,8 @@ import { Application, Ticker } from 'pixi.js'
 import { GAME_BACKGROUND_COLOR, GAME_HEIGHT, GAME_WIDTH } from './utils/constants';
 import { Keyboard } from './utils/Keyboard';
 import { initialize_assets } from './assets';
-import { GameScene } from './scenes/GameScene';
+/* import { GameScene } from './scenes/GameScene'; */
+import { TitleScreenScene } from './scenes/TitleScreenScene';
 
 const app = new Application<HTMLCanvasElement>({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -41,7 +42,7 @@ window.addEventListener("resize", () => {
 window.dispatchEvent(new Event("resize"));
 
 initialize_assets().then(() => {
-	const currentScene = new GameScene();
+	const currentScene = new TitleScreenScene();
 
 	app.stage.addChild(currentScene);
 
