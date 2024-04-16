@@ -7,7 +7,6 @@ export abstract class AbstractMob extends Container {
     }
 
     abstract getRadius() : number;
-    abstract keepWithinBounds() : void;
     abstract move(deltaSeconds : number) : void;
     
 }
