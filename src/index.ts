@@ -1,5 +1,9 @@
+import { initialize_assets } from "./assets";
 import { TitleScreenScene } from "./scenes/TitleScreenScene";
 import { SceneManager } from "./utils/SceneManager";
 
 SceneManager.initialize();
-SceneManager.changeScene(new TitleScreenScene());
+
+initialize_assets().then(() => {
+	SceneManager.changeScene(new TitleScreenScene());
+});
