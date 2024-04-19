@@ -6,6 +6,8 @@ import { Container } from "pixi.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { Tween } from "tweedle.js";
 import { Timer } from "../ui/Timer";
+import { GameResultScene } from "./GameResultScene";
+import { SceneManager } from "../utils/SceneManager";
 
 export class GameScene extends AbstractScene {
     
@@ -57,8 +59,18 @@ export class GameScene extends AbstractScene {
             enemy.update(deltaSeconds);
 
             if(this.player.is_colliding(enemy)) {
-                console.log("Collision!"); // TODO
+                this.goToGameResultScene("You lost!", "red");
             }
         });
+
+        if(this.timer.getCounter() <= 0) {
+            this.goToGameResultScene("You won!", "green");
+        }
+
+    }
+
+    private goToGameResultScene(titleText : string, titleColor : string) {
+
+        SceneManager.changeScene(new GameResultScene(titleText, titleColor));
     }
 }
