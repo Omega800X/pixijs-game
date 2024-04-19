@@ -1,5 +1,6 @@
 import { Container, Text, TextStyle } from "pixi.js";
 import { Tween } from "tweedle.js";
+import { FONT } from "../utils/constants";
 
 export class Timer extends Container {
 
@@ -11,7 +12,7 @@ export class Timer extends Container {
 
         const textStyle = new TextStyle({
             fontSize: 250,
-            fontFamily: "Arial",
+            fontFamily: FONT,
         });
 
         this.counter = time;
