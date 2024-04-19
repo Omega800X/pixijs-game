@@ -34,4 +34,8 @@ export class Timer extends Container {
         this.decrement();
         this.visibleText.text = this.counter;
     }
+
+    public getCounter() : number {
+        return this.counter;
+    }
 }
