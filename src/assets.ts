@@ -8,7 +8,8 @@ export const manifest : AssetsManifest = {
             {
                 "Player" : "./Player.png",
                 "Enemy" : "./Enemy.png",
-                "SpawnFloor" : "./SpawnFloor.png"
+                "SpawnFloor" : "./SpawnFloor.png",
+                "AbstractGroovy" : "./AbstractGroovy.ttf"
             }
         },
     ]
