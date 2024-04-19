@@ -9,7 +9,7 @@ import { Timer } from "../ui/Timer";
 
 export class GameScene extends AbstractScene {
     
-    private static readonly TIME_LIMIT_MS = 12000; 
+    private static readonly TIME_LIMIT_MS = 120000; 
     private static readonly SPAWN_TIME_MS = 6000;
     private player : Player = new Player("Player", 350);
     private enemies : Enemy[] = [];
