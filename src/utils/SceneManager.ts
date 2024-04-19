@@ -68,9 +68,9 @@ export namespace SceneManager {
         app.stage.addChild(currentScene);
     }
 
-    function update(framePassed : number) {
+    function update() {
         Group.shared.update();
-        currentScene?.update(framePassed, Ticker.shared.elapsedMS);
+        currentScene?.update(Ticker.shared.elapsedMS);
     }
 
 }
