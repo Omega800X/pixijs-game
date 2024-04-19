@@ -7,7 +7,8 @@ export const manifest : AssetsManifest = {
             assets:
             {
                 "Player" : "./Player.png",
-                "Enemy" : "./EnemyBall.png"
+                "Enemy" : "./Enemy.png",
+                "SpawnFloor" : "./SpawnFloor.png"
             }
         },
     ]
