@@ -5,11 +5,19 @@ import { Button } from "../ui/Button";
 import { SceneManager } from "../utils/SceneManager";
 import { TitleScreenScene } from "./TitleScreenScene";
 import { GameScene } from "./GameScene";
+import { HUD } from "../ui/HUD";
+import { sound } from "@pixi/sound";
 
 export class GameResultScene extends AbstractScene {
     
+    private hud;
+    private backgroundMusic = sound.find("MenuMusic");
+
     constructor(titleText : string, titleColor : string) {
         super();
+
+        this.hud = new HUD();
+        this.backgroundMusic.play({loop: true, volume: 0.1});
 
         const textStyle = new TextStyle({
             fontSize: 250,
@@ -40,13 +48,20 @@ export class GameResultScene extends AbstractScene {
         this.addChild(title);
         this.addChild(titleScreenBtn);
         this.addChild(retryBtn);
+        this.addChild(this.hud);
     }
 
     private goToGame() {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
         SceneManager.changeScene(new GameScene());
     }
 
     private goToTitleScreen() {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
         SceneManager.changeScene(new TitleScreenScene());
     }
 

@@ -6,15 +6,23 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { Enemy } from "../game/Enemy";
 import { exit } from "@tauri-apps/api/process";
+import { HUD } from "../ui/HUD";
+import { sound } from "@pixi/sound";
 
 export class TitleScreenScene extends AbstractScene {
     
     private backgroundContainer : Container;
     private backgroundBalls : Enemy[];
+    private hud;
+    private backgroundMusic = sound.find("MenuMusic");
 
     constructor() {
         super();
-
+        
+        
+        
+        this.hud = new HUD();
+        this.backgroundMusic.play({loop: true, volume: 0.1});
         this.backgroundContainer = new Container();
         this.backgroundContainer.alpha = 0.5;
         this.backgroundBalls = [];
@@ -40,6 +48,7 @@ export class TitleScreenScene extends AbstractScene {
         this.addChild(this.backgroundContainer);
         this.addChild(title);
         this.addChild(playButton);
+        this.addChild(this.hud);
 
         if (IS_TAURI) {
             const exitButton = new Button("Exit", 0xfdfff7, 0xd21404, this.exitGame);
@@ -55,6 +64,9 @@ export class TitleScreenScene extends AbstractScene {
     };
 
     private goToGameScene() {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
         SceneManager.changeScene(new GameScene());
     }
     

@@ -9,6 +9,8 @@ import { Timer } from "../ui/Timer";
 import { GameResultScene } from "./GameResultScene";
 import { SceneManager } from "../utils/SceneManager";
 import { TutorialContainer } from "../game/TutorialContainer";
+import { HUD } from "../ui/HUD";
+import { sound } from "@pixi/sound";
 
 export class GameScene extends AbstractScene {
     
@@ -17,14 +19,16 @@ export class GameScene extends AbstractScene {
     private player : Player = new Player("Player", 350);
     private enemies : Enemy[] = [];
     private gameContainer = new Container();
+    private hud;
     private timer = new Timer(GameScene.TIME_LIMIT_MS / 1000);
-    
+    private backgroundMusic = sound.find("GameMusic");
 
     constructor () {
         super();
 
         const tutorialContainer = new TutorialContainer();
-
+        this.backgroundMusic.play({loop: true, volume: 0.1});
+        this.hud = new HUD();
         this.gameContainer = new Container();
         const spawnFloor = new SpawnFloor();
 
@@ -46,6 +50,7 @@ export class GameScene extends AbstractScene {
         this.addChild(tutorialContainer);
         this.addChild(this.timer);
         this.addChild(this.gameContainer);
+        this.addChild(this.hud);
 
         new Tween(tutorialContainer).to({alpha:0}, 3000).onComplete(() => {this.removeChild(tutorialContainer)}).start();
     }
@@ -74,7 +79,9 @@ export class GameScene extends AbstractScene {
     }
 
     private goToGameResultScene(titleText : string, titleColor : string) {
-
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
         SceneManager.changeScene(new GameResultScene(titleText, titleColor));
     }
 }
