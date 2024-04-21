@@ -8,6 +8,7 @@ import { Tween } from "tweedle.js";
 import { Timer } from "../ui/Timer";
 import { GameResultScene } from "./GameResultScene";
 import { SceneManager } from "../utils/SceneManager";
+import { TutorialContainer } from "../game/TutorialContainer";
 
 export class GameScene extends AbstractScene {
     
@@ -21,6 +22,8 @@ export class GameScene extends AbstractScene {
 
     constructor () {
         super();
+
+        const tutorialContainer = new TutorialContainer();
 
         this.gameContainer = new Container();
         const spawnFloor = new SpawnFloor();
@@ -40,10 +43,11 @@ export class GameScene extends AbstractScene {
             .start();
 
         this.addChild(spawnFloor);
+        this.addChild(tutorialContainer);
         this.addChild(this.timer);
         this.addChild(this.gameContainer);
 
-        
+        new Tween(tutorialContainer).to({alpha:0}, 3000).onComplete(() => {this.removeChild(tutorialContainer)}).start();
     }
     
     private spawnEnemy() : void {
