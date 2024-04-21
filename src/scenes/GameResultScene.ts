@@ -7,13 +7,14 @@ import { TitleScreenScene } from "./TitleScreenScene";
 import { GameScene } from "./GameScene";
 import { HUD } from "../ui/HUD";
 import { sound } from "@pixi/sound";
+import { RecordManager } from "../ui/RecordManager";
 
 export class GameResultScene extends AbstractScene {
     
     private hud;
     private backgroundMusic = sound.find("MenuMusic");
 
-    constructor(titleText : string, titleColor : string, survivedTime : number) {
+    constructor(titleText : string, titleColor : string, survivedTime : number, recordKey : string) {
         super();
 
         this.hud = new HUD();
@@ -38,13 +39,17 @@ export class GameResultScene extends AbstractScene {
         survivedTimeText.anchor.set(0.5);
         survivedTimeText.position.set(title.x, 430);
 
+        const personalBestText = new Text("Personal Best: " + RecordManager.retrieveRecord(recordKey) + "s", textStyle2);
+        personalBestText.anchor.set(0.5);
+        personalBestText.position.set(title.x, 490);
+
         const retryBtn = new Button(
             "Retry", 
             0xfdfff7, 
             0x74b72e, 
             this.goToGame.bind(this)
         );
-        retryBtn.position.set(title.x - retryBtn.width/2, 500);
+        retryBtn.position.set(title.x - retryBtn.width/2, 540);
 
         const titleScreenBtn = new Button(
             "Title Screen", 
@@ -56,6 +61,7 @@ export class GameResultScene extends AbstractScene {
 
         this.addChild(title);
         this.addChild(survivedTimeText);
+        this.addChild(personalBestText);
         this.addChild(titleScreenBtn);
         this.addChild(retryBtn);
         this.addChild(this.hud);

@@ -11,11 +11,13 @@ import { SceneManager } from "../utils/SceneManager";
 import { TutorialContainer } from "../game/TutorialContainer";
 import { HUD } from "../ui/HUD";
 import { sound } from "@pixi/sound";
+import { RecordManager } from "../ui/RecordManager";
 
 export class GameScene extends AbstractScene {
     
     private static readonly TIME_LIMIT_MS = 120000; 
     private static readonly SPAWN_TIME_MS = 6000;
+    private static readonly RECORD_KEY = "normalGameRecord";
     private player : Player = new Player("Player", 350);
     private enemies : Enemy[] = [];
     private gameContainer = new Container();
@@ -68,11 +70,17 @@ export class GameScene extends AbstractScene {
             enemy.update(deltaSeconds);
 
             if(this.player.is_colliding(enemy)) {
+                if(RecordManager.isRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime())) {
+                    RecordManager.storeRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime().toString());
+                }
                 this.goToGameResultScene("You lost!", "red", this.timer.getSurvivedTime());
             }
         });
 
         if(this.timer.getCounter() <= 0) {
+            if(RecordManager.isRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime())) {
+                RecordManager.storeRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime().toString());
+            }
             this.goToGameResultScene("You won!", "green", this.timer.getSurvivedTime());
         }
 
@@ -82,6 +90,6 @@ export class GameScene extends AbstractScene {
         if(sound.isPlaying()) {
             sound.stopAll();
         }
-        SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime));
+        SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime, GameScene.RECORD_KEY));
     }
 }
