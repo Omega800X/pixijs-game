@@ -68,20 +68,20 @@ export class GameScene extends AbstractScene {
             enemy.update(deltaSeconds);
 
             if(this.player.is_colliding(enemy)) {
-                this.goToGameResultScene("You lost!", "red");
+                this.goToGameResultScene("You lost!", "red", this.timer.getSurvivedTime());
             }
         });
 
         if(this.timer.getCounter() <= 0) {
-            this.goToGameResultScene("You won!", "green");
+            this.goToGameResultScene("You won!", "green", this.timer.getSurvivedTime());
         }
 
     }
 
-    private goToGameResultScene(titleText : string, titleColor : string) {
+    private goToGameResultScene(titleText : string, titleColor : string, survivedTime : number) {
         if(sound.isPlaying()) {
             sound.stopAll();
         }
-        SceneManager.changeScene(new GameResultScene(titleText, titleColor));
+        SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime));
     }
 }

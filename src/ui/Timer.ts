@@ -6,6 +6,7 @@ export class Timer extends Container {
 
     private visibleText : Text;
     private counter : number;
+    private survivedTime : number = 0;
 
     constructor(time : number) {
         super();
@@ -27,16 +28,25 @@ export class Timer extends Container {
         this.addChild(this.visibleText);
     }
 
-    private decrement() : void {
+    private decrementCounter() : void {
         this.counter--;
     }
 
+    private incrementSurvivedTime() : void {
+        this.survivedTime++;
+    }
+
     private update() : void {
-        this.decrement();
+        this.decrementCounter();
+        this.incrementSurvivedTime();
         this.visibleText.text = this.counter;
     }
 
     public getCounter() : number {
         return this.counter;
+    }
+
+    public getSurvivedTime() : number {
+        return this.survivedTime;
     }
 }

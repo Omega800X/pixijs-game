@@ -13,7 +13,7 @@ export class GameResultScene extends AbstractScene {
     private hud;
     private backgroundMusic = sound.find("MenuMusic");
 
-    constructor(titleText : string, titleColor : string) {
+    constructor(titleText : string, titleColor : string, survivedTime : number) {
         super();
 
         this.hud = new HUD();
@@ -28,6 +28,15 @@ export class GameResultScene extends AbstractScene {
         const title = new Text(titleText, textStyle);
         title.anchor.set(0.5);
         title.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/4);
+
+        const textStyle2 = new TextStyle({
+            fontSize: 40,
+            fontFamily: FONT,
+        });
+
+        const survivedTimeText = new Text("Survived time: " + survivedTime + "s", textStyle2);
+        survivedTimeText.anchor.set(0.5);
+        survivedTimeText.position.set(title.x, 430);
 
         const retryBtn = new Button(
             "Retry", 
@@ -46,6 +55,7 @@ export class GameResultScene extends AbstractScene {
         titleScreenBtn.position.set(title.x - titleScreenBtn.width/2, 700);
 
         this.addChild(title);
+        this.addChild(survivedTimeText);
         this.addChild(titleScreenBtn);
         this.addChild(retryBtn);
         this.addChild(this.hud);
