@@ -8,6 +8,7 @@ import { Enemy } from "../game/Enemy";
 import { exit } from "@tauri-apps/api/process";
 import { HUD } from "../ui/HUD";
 import { sound } from "@pixi/sound";
+import { EndlessGameScene } from "./EndlessGameScene";
 
 export class TitleScreenScene extends AbstractScene {
     
@@ -28,7 +29,7 @@ export class TitleScreenScene extends AbstractScene {
         this.backgroundBalls = [];
 
         for(let i = 0; i < 20; i++) {
-            const newEnemy = new Enemy("Enemy", 300);
+            const newEnemy = new Enemy("Enemy", 300, 28);
             this.backgroundBalls.push(newEnemy);
             this.backgroundContainer.addChild(newEnemy);
         }
@@ -45,9 +46,13 @@ export class TitleScreenScene extends AbstractScene {
         const playButton = new Button("Play", 0xfdfff7, 0x74b72e, this.goToGameScene);
         playButton.position.set(title.x - playButton.width/2, 500);
 
+        const endlessButton = new Button("Endless", 0xfdfff7, 0x330066, this.goToEndlessGameScene);
+        endlessButton.position.set(title.x - playButton.width/2, 600);
+
         this.addChild(this.backgroundContainer);
         this.addChild(title);
         this.addChild(playButton);
+        this.addChild(endlessButton);
         this.addChild(this.hud);
 
         if (IS_TAURI) {
@@ -68,6 +73,13 @@ export class TitleScreenScene extends AbstractScene {
             sound.stopAll();
         }
         SceneManager.changeScene(new GameScene());
+    }
+
+    private goToEndlessGameScene() {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
+        SceneManager.changeScene(new EndlessGameScene());
     }
     
     private exitGame() {
