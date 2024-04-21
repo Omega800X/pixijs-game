@@ -1,6 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { FONT } from "../utils/constants";
 import { Tween } from "tweedle.js";
+import { sound } from "@pixi/sound";
 
 export class Button extends Container {
     private callback : Function;
@@ -45,6 +46,7 @@ export class Button extends Container {
 
     private onMouseUp() : void {
         this.callback();
+        sound.play("ButtonPressed");
     }
 
     private onMouseOver() : void {
