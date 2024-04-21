@@ -1,10 +1,11 @@
 import { Container, Text, TextStyle } from "pixi.js";
-import { FONT, GAME_NAME, SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
+import { FONT, GAME_NAME, IS_TAURI, SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { AbstractScene } from "./AbstractScene";
 import { Button } from "../ui/Button";
 import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { Enemy } from "../game/Enemy";
+import { exit } from "@tauri-apps/api/process";
 
 export class TitleScreenScene extends AbstractScene {
     
@@ -33,12 +34,18 @@ export class TitleScreenScene extends AbstractScene {
         title.anchor.set(0.5);
         title.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/4);
 
-        const playButton = new Button("Play", 0xfdfff7, 0xfff380, this.goToGameScene);
+        const playButton = new Button("Play", 0xfdfff7, 0x74b72e, this.goToGameScene);
         playButton.position.set(title.x - playButton.width/2, 500);
 
         this.addChild(this.backgroundContainer);
         this.addChild(title);
         this.addChild(playButton);
+
+        if (IS_TAURI) {
+            const exitButton = new Button("Exit", 0xfdfff7, 0xd21404, this.exitGame);
+            exitButton.position.set(title.x - exitButton.width/2, 700);
+            this.addChild(exitButton);
+        }
     }
 
     public override update(deltaTime : number): void {
@@ -49,5 +56,11 @@ export class TitleScreenScene extends AbstractScene {
 
     private goToGameScene() {
         SceneManager.changeScene(new GameScene());
+    }
+    
+    private exitGame() {
+        if (IS_TAURI) {
+            exit();
+        }
     }
 }
