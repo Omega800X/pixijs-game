@@ -32,6 +32,10 @@ export class Timer extends Container {
         this.counter--;
     }
 
+    public incrementCounter(increment : number) : void {
+        this.counter += increment;
+    }
+
     private incrementSurvivedTime() : void {
         this.survivedTime++;
     }
