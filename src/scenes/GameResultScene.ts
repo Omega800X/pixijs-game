@@ -32,7 +32,7 @@ export class GameResultScene extends AbstractScene {
         const titleScreenBtn = new Button(
             "Title Screen", 
             0xfdfff7, 
-            0xD21404, 
+            0xd21404, 
             this.goToTitleScreen.bind(this)
         );
         titleScreenBtn.position.set(title.x - titleScreenBtn.width/2, 700);
