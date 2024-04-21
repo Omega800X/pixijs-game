@@ -8,13 +8,14 @@ import { GameScene } from "./GameScene";
 import { HUD } from "../ui/HUD";
 import { sound } from "@pixi/sound";
 import { RecordManager } from "../ui/RecordManager";
+import { EndlessGameScene } from "./EndlessGameScene";
 
 export class GameResultScene extends AbstractScene {
     
     private hud;
     private backgroundMusic = sound.find("MenuMusic");
 
-    constructor(titleText : string, titleColor : string, survivedTime : number, recordKey : string) {
+    constructor(titleText : string, titleColor : string, survivedTime : number, recordKey : string, gamemode : ("normal" | "endless")) {
         super();
 
         this.hud = new HUD();
@@ -47,7 +48,7 @@ export class GameResultScene extends AbstractScene {
             "Retry", 
             0xfdfff7, 
             0x74b72e, 
-            this.goToGame.bind(this)
+            gamemode === "normal" ? this.goToGame.bind(this) : this.goToEndless.bind(this)
         );
         retryBtn.position.set(title.x - retryBtn.width/2, 540);
 
@@ -72,6 +73,13 @@ export class GameResultScene extends AbstractScene {
             sound.stopAll();
         }
         SceneManager.changeScene(new GameScene());
+    }
+
+    private goToEndless() {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
+        SceneManager.changeScene(new EndlessGameScene());
     }
 
     private goToTitleScreen() {

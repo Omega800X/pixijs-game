@@ -18,10 +18,10 @@ export class GameScene extends AbstractScene {
     private static readonly TIME_LIMIT_MS = 120000; 
     private static readonly SPAWN_TIME_MS = 6000;
     private static readonly RECORD_KEY = "normalGameRecord";
-    private player : Player = new Player("Player", 350);
+    private player : Player = new Player("Player", 350, 28);
     private enemies : Enemy[] = [];
-    private gameContainer = new Container();
-    private hud;
+    private gameContainer : Container;
+    private hud : HUD;
     private timer = new Timer(GameScene.TIME_LIMIT_MS / 1000);
     private backgroundMusic = sound.find("GameMusic");
 
@@ -58,18 +58,25 @@ export class GameScene extends AbstractScene {
     }
     
     private spawnEnemy() : void {
-        const newEnemy = new Enemy("Enemy", 300);
+        const newEnemy = new Enemy("Enemy", 300, 28);
         this.enemies.push(newEnemy);
         this.gameContainer.addChild(newEnemy);
     }
     
+    private goToGameResultScene(titleText : string, titleColor : string, survivedTime : number) {
+        if(sound.isPlaying()) {
+            sound.stopAll();
+        }
+        SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime, GameScene.RECORD_KEY, "normal"));
+    }
+
     public override update(deltaTime : number) : void {
         const deltaSeconds = deltaTime/1000;
         this.player.update(deltaSeconds);
         this.enemies.forEach(enemy => {
             enemy.update(deltaSeconds);
 
-            if(this.player.is_colliding(enemy)) {
+            if(this.player.isColliding(enemy)) {
                 if(RecordManager.isRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime())) {
                     RecordManager.storeRecord(GameScene.RECORD_KEY, this.timer.getSurvivedTime().toString());
                 }
@@ -84,12 +91,5 @@ export class GameScene extends AbstractScene {
             this.goToGameResultScene("You won!", "green", this.timer.getSurvivedTime());
         }
 
-    }
-
-    private goToGameResultScene(titleText : string, titleColor : string, survivedTime : number) {
-        if(sound.isPlaying()) {
-            sound.stopAll();
-        }
-        SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime, GameScene.RECORD_KEY));
     }
 }
