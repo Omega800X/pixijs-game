@@ -22,7 +22,7 @@ export class Timer extends Container {
 
         new Tween({a: 0})
             .to({a: 1}, 1000)
-            .repeat(time)
+            .repeat(Infinity)
             .onRepeat(this.update.bind(this))
             .start();
         this.addChild(this.visibleText);

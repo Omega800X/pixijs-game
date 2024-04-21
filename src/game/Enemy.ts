@@ -1,16 +1,22 @@
-import { Point } from "pixi.js";
+import { Graphics } from "pixi.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { AbstractBall } from "./AbstractBall";
 import { Tween } from "tweedle.js";
 
 export class Enemy extends AbstractBall {
     
+    private slowed : boolean = false;
+    private highlight : Graphics = new Graphics();
 
     constructor(sprite : string, velocity : number, radius : number) {
         super(sprite, velocity, radius);
         this.speed.x = this.velocity + Math.floor(100 * Math.random());
         this.speed.y = this.velocity + Math.floor(100 * Math.random());
         this.setRandomSpawnLoc();
+        this.highlight.lineStyle({alpha: 1, color: 0x0492c2, width: 10})
+        this.highlight.drawCircle(0, 0, 33);
+        this.highlight.visible = false;
+        this.addChild(this.highlight);
     }
 
     private setRandomSpawnLoc() : void {
@@ -71,10 +77,28 @@ export class Enemy extends AbstractBall {
         this.y += this.speed.y * deltaSeconds;
     }
 
-    public slow() {
-        const currentSpeed = this.speed;
-        this.speed = new Point(currentSpeed.x/2, currentSpeed.y/2);
-        new Tween(this.speed).to({x: currentSpeed.x, y: currentSpeed.y}, 3000).start();
+    public slow() : void {
+        if(this.slowed) {
+            return;
+        }
+       
+        
+        
+        this.speed.x *= 0.5;
+        this.speed.y *= 0.5;
+        this.slowed = true;
+        this.highlight.visible = true;
+
+        new Tween({a: 0})
+            .to({a: 1}, 3000)
+            .onComplete(() => {
+                this.slowed = false; 
+                this.speed.x *= 2; 
+                this.speed.y *= 2;
+                this.highlight.visible = false;
+            }).start();
+        
+        
     }
 
     override update(deltaSeconds: number): void {
@@ -82,3 +106,5 @@ export class Enemy extends AbstractBall {
         this.keepWithinBounds();
     }
 }
+
+    

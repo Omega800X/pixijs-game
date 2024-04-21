@@ -1,23 +1,19 @@
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils/constants";
+import { Timer } from "../ui/Timer";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { AbstractPowerUp } from "./AbstractPowerUp";
-import { Enemy } from "./Enemy";
 
-export class FreezePowerUp extends AbstractPowerUp {
+export class MoreTimePowerUp extends AbstractPowerUp {
+    private gameTimer : Timer;
 
-    private enemies : Enemy[];
-
-
-    constructor(enemies : Enemy[]) {
-        super("Freeze", 0, 28);
-        this.enemies = enemies;
+    constructor(timer : Timer) {
+        super("MoreTime", 0, 28);
         this.position.set(Math.floor(Math.random() * SCREEN_WIDTH), Math.floor(Math.random() * SCREEN_HEIGHT));
+        this.gameTimer = timer;
         this.keepWithinBounds();
     }
 
     public override powerUpEffect(): void {
-        this.enemies.forEach(enemy => {
-            enemy.slow();
-        });
+        this.gameTimer.incrementCounter(15);
     }
     protected override keepWithinBounds(): void {
         if(this.x > SCREEN_WIDTH - this.radius) {
@@ -33,7 +29,9 @@ export class FreezePowerUp extends AbstractPowerUp {
         }
     }
     
-    override update(): void {}
-    protected override move(): void {}
+    override update(_deltaSeconds: number): void {}
+
+    protected override move(): void {
+    }
 
 }
