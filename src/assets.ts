@@ -15,7 +15,10 @@ export const manifest : AssetsManifest = {
                 "AbstractGroovy" : "./AbstractGroovy.ttf",
                 "MenuMusic" : "./MenuMusic.mp3",
                 "GameMusic" : "./GameMusic.mp3",
-                "ButtonPressed" : "./ButtonPressed.wav"
+                "ButtonPressed" : "./ButtonPressed.wav",
+                "Freeze" : "./FreezePowerUp.png",
+                "MinusOne" : "./MinusOnePowerUp.png",
+                "MoreTime" : "./MoreTimePowerUp.png",
             }
         },
     ]
