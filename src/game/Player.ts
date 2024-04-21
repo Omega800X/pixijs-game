@@ -4,8 +4,8 @@ import { AbstractBall } from "./AbstractBall";
 
 export class Player extends AbstractBall {
 
-    constructor(sprite : string, velocity : number) {
-        super(sprite, velocity);
+    constructor(sprite : string, velocity : number, radius : number) {
+        super(sprite, velocity, radius);
     }
 
     protected override keepWithinBounds() {

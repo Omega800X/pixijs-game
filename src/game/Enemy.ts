@@ -1,11 +1,13 @@
+import { Point } from "pixi.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { AbstractBall } from "./AbstractBall";
+import { Tween } from "tweedle.js";
 
 export class Enemy extends AbstractBall {
     
 
-    constructor(sprite : string, velocity : number) {
-        super(sprite, velocity);
+    constructor(sprite : string, velocity : number, radius : number) {
+        super(sprite, velocity, radius);
         this.speed.x = this.velocity + Math.floor(100 * Math.random());
         this.speed.y = this.velocity + Math.floor(100 * Math.random());
         this.setRandomSpawnLoc();
@@ -63,10 +65,18 @@ export class Enemy extends AbstractBall {
             this.speed.y = Math.abs(this.speed.y);
         }
     }
+
     protected override move(deltaSeconds: number): void {
         this.x += this.speed.x * deltaSeconds;
         this.y += this.speed.y * deltaSeconds;
     }
+
+    public slow() {
+        const currentSpeed = this.speed;
+        this.speed = new Point(currentSpeed.x/2, currentSpeed.y/2);
+        new Tween(this.speed).to({x: currentSpeed.x, y: currentSpeed.y}, 3000).start();
+    }
+
     override update(deltaSeconds: number): void {
         this.move(deltaSeconds);
         this.keepWithinBounds();
