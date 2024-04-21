@@ -9,7 +9,13 @@ export const manifest : AssetsManifest = {
                 "Player" : "./Player.png",
                 "Enemy" : "./Enemy.png",
                 "SpawnFloor" : "./SpawnFloor.png",
-                "AbstractGroovy" : "./AbstractGroovy.ttf"
+                "SoundOn" : "./SoundOn.png",
+                "SoundOff" : "./SoundOff.png",
+                "ToggleFullscreen" : "./ToggleFullscreen.png",
+                "AbstractGroovy" : "./AbstractGroovy.ttf",
+                "MenuMusic" : "./MenuMusic.mp3",
+                "GameMusic" : "./GameMusic.mp3",
+                "ButtonPressed" : "./ButtonPressed.wav"
             }
         },
     ]
