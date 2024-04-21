@@ -53,6 +53,9 @@ export namespace SceneManager {
         // throw a resize event once on game start so the game gets centered
         window.dispatchEvent(new Event("resize"));
 
+        // event to avoid users pressing right click to open the menu
+        window.addEventListener("contextmenu", e => e.preventDefault());
+
         Ticker.shared.add(update);
     }
 
