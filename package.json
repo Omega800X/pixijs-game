@@ -9,6 +9,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@pixi/sound": "^5.2.0",
     "@tauri-apps/api": "^1.5.3",
     "pixi.js": "^7.4.0",
     "tweedle.js": "^2.1.0"
