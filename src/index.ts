@@ -1,19 +1,9 @@
-import { Application, Sprite } from 'pixi.js'
+import { initialize_assets } from "./assets";
+import { GameScene } from "./scenes/GameScene";
+import { GameManager } from "./utils/GameManager";
 
-const app = new Application<HTMLCanvasElement>({
-	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-	resolution: window.devicePixelRatio || 1,
-	autoDensity: true,
-	backgroundColor: 0x6495ed,
-	width: 640,
-	height: 480
+GameManager.initialize();
+
+initialize_assets().then(() => {
+	GameManager.changeScene(new GameScene());
 });
-
-const clampy: Sprite = Sprite.from("clampy.png");
-
-clampy.anchor.set(0.5);
-
-clampy.x = app.screen.width / 2;
-clampy.y = app.screen.height / 2;
-
-app.stage.addChild(clampy);
