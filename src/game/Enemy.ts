@@ -1,18 +1,20 @@
 import { Container, Graphics, Sprite } from "pixi.js";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
-import { Keyboard } from "../utils/Keyboard";
+import { getRandomIntInclusive } from "../utils/random_number";
+import { Player } from "./Player";
 
-export class Player extends Container {
+export class Enemy extends Container {
+
     private sprite: Sprite;
-    private moveSpeed: number;
     private hitbox: Graphics;
+    private speedX: number = getRandomIntInclusive(200, 400);
+    private speedY: number = getRandomIntInclusive(200, 400);
 
-    constructor(sprite: string, moveSpeed: number, scale: number) {
+    constructor(sprite: string, scale: number) {
         super();
 
         this.sprite = Sprite.from(sprite);
         this.sprite.anchor.set(0.5);
-        this.moveSpeed = moveSpeed;
         this.sprite.scale.set(scale);
 
         this.hitbox = new Graphics();
@@ -29,29 +31,34 @@ export class Player extends Container {
     private keepInBounds(): void {
         if (this.x > SCREEN_WIDTH - this.getRadius()) {
             this.x = SCREEN_WIDTH - this.getRadius();
+            this.speedX = this.speedX * -1;
         } else if (this.x < 0 + this.getRadius()) {
             this.x = 0 + this.getRadius();
+            this.speedX = Math.abs(this.speedX);
         }
 
         if (this.y > SCREEN_HEIGHT - this.getRadius()) {
             this.y = SCREEN_HEIGHT - this.getRadius();
+            this.speedY = this.speedY * -1;
         } else if (this.y < 0 + this.getRadius()) {
             this.y = 0 + this.getRadius();
+            this.speedY = Math.abs(this.speedY);
         }
     }
 
     private move(deltaSeconds: number): void {
-        if (Keyboard.state.get("ArrowRight") || Keyboard.state.get("KeyD")) {
-            this.x += this.moveSpeed * deltaSeconds;
-        } else if (Keyboard.state.get("ArrowLeft") || Keyboard.state.get("KeyA")) {
-            this.x -= this.moveSpeed * deltaSeconds;
-        }
+        this.x += this.speedX * deltaSeconds;
+        this.y += this.speedY * deltaSeconds;
+    }
 
-        if (Keyboard.state.get("ArrowUp") || Keyboard.state.get("KeyW")) {
-            this.y -= this.moveSpeed * deltaSeconds;
-        } else if (Keyboard.state.get("ArrowDown") || Keyboard.state.get("KeyS")) {
-            this.y += this.moveSpeed * deltaSeconds;
-        }
+
+    public isColliding(player: Player) {
+        const dx = player.x - this.x;
+        const dy = player.y - this.y;
+        const distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        const sumOfRadii = this.getRadius() + player.getRadius();
+
+        return distance < sumOfRadii;
     }
 
     public getRadius(): number {
