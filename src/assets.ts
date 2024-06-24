@@ -8,6 +8,8 @@ export const manifest: AssetsManifest = {
             {
                 "player": "./player.png",
                 "enemy": "./enemy.png",
+                "square": "./square.png",
+                "crayon_libre": "./CrayonLibre-vm6r9.ttf"
             }
         },
     ]

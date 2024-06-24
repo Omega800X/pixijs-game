@@ -4,16 +4,23 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/constants";
 import { Enemy } from "../game/Enemy";
 import { Tween } from "tweedle.js";
 import { Container } from "pixi.js";
+import { GameManager } from "../utils/GameManager";
+import { GameResultScene } from "./GameResultScene";
+import { Timer } from "../ui/Timer";
 
 export class GameScene extends AbstractScene {
 
+    private timer: Timer;
+
     private player: Player;
     private enemies: Enemy[] = [];
-
     private gameContainer: Container = new Container();
 
     constructor() {
         super();
+
+        this.timer = new Timer();
+        this.timer.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
         this.player = new Player("player", 400, 0.8);
         this.player.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -27,6 +34,7 @@ export class GameScene extends AbstractScene {
             .start();
 
         this.gameContainer.addChild(this.player);
+        this.addChild(this.timer);
         this.addChild(this.gameContainer);
     }
 
@@ -71,13 +79,26 @@ export class GameScene extends AbstractScene {
         this.gameContainer.addChild(newEnemy);
     }
 
+    private goToResultScene(titleText: string, titleColor: number, result: ("win" | "lose")): void {
+        GameManager.changeScene(new GameResultScene(titleText, titleColor, result));
+    }
+
     public override update(deltaTime: number): void {
+
         const deltaSeconds = deltaTime / 1000;
         this.player.update(deltaSeconds);
 
         for (let index = 0; index < this.enemies.length; index++) {
-            this.enemies[index].update(deltaSeconds);
-            console.log(this.enemies[index].isColliding(this.player));
+            const enemy = this.enemies[index];
+            enemy.update(deltaSeconds);
+
+            if (enemy.isColliding(this.player)) {
+                this.goToResultScene("¡Perdiste!", 0xd84f58, "lose");
+            }
+        }
+
+        if (this.timer.getCounter() == 5) {
+            this.goToResultScene("¡Ganaste!", 0x6cc47c, "win");
         }
     }
 }
