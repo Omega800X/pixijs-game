@@ -9,6 +9,7 @@ import { exit } from "@tauri-apps/api/process";
 import { HUD } from "../ui/HUD";
 import { sound } from "@pixi/sound";
 import { EndlessGameScene } from "./EndlessGameScene";
+import { TutorialScene } from "./TutorialScene";
 
 export class TitleScreenScene extends AbstractScene {
 
@@ -28,7 +29,7 @@ export class TitleScreenScene extends AbstractScene {
         this.backgroundContainer.alpha = 0.5;
         this.backgroundBalls = [];
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 30; i++) {
             const newEnemy = new Enemy("Enemy", 300, 28);
             this.backgroundBalls.push(newEnemy);
             this.backgroundContainer.addChild(newEnemy);
@@ -43,21 +44,25 @@ export class TitleScreenScene extends AbstractScene {
         title.anchor.set(0.5);
         title.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4);
 
-        const playButton = new Button("Play", 0xfdfff7, 0x74b72e, this.goToGameScene);
+        const playButton = new Button("Play", 0xfdfff7, 0xffe135, this.goToGameScene);
         playButton.position.set(title.x - playButton.width / 2, 500);
 
-        const endlessButton = new Button("Endless", 0xfdfff7, 0xfc6a03, this.goToEndlessGameScene);
+        const endlessButton = new Button("Endless", 0xfdfff7, 0xffe135, this.goToEndlessGameScene);
         endlessButton.position.set(title.x - playButton.width / 2, 600);
+
+        const tutorialButton = new Button("Tutorial", 0xfdfff7, 0xffe135, this.goToTutorialScene);
+        tutorialButton.position.set(title.x - playButton.width / 2, 700);
 
         this.addChild(this.backgroundContainer);
         this.addChild(title);
         this.addChild(playButton);
         this.addChild(endlessButton);
+        this.addChild(tutorialButton)
         this.addChild(this.hud);
 
         if (IS_TAURI) {
-            const exitButton = new Button("Exit", 0xfdfff7, 0xd21404, this.exitGame);
-            exitButton.position.set(title.x - exitButton.width / 2, 700);
+            const exitButton = new Button("Exit", 0xfdfff7, 0xffe135, this.exitGame);
+            exitButton.position.set(title.x - exitButton.width / 2, 800);
             this.addChild(exitButton);
         }
     }
@@ -80,6 +85,13 @@ export class TitleScreenScene extends AbstractScene {
             sound.stopAll();
         }
         SceneManager.changeScene(new EndlessGameScene());
+    }
+
+    private goToTutorialScene() {
+        if (sound.isPlaying()) {
+            sound.stopAll();
+        }
+        SceneManager.changeScene(new TutorialScene());
     }
 
     private exitGame() {

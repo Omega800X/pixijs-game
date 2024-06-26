@@ -11,15 +11,15 @@ import { RecordManager } from "../ui/RecordManager";
 import { EndlessGameScene } from "./EndlessGameScene";
 
 export class GameResultScene extends AbstractScene {
-    
+
     private hud;
     private backgroundMusic = sound.find("MenuMusic");
 
-    constructor(titleText : string, titleColor : string, survivedTime : number, recordKey : string, gamemode : ("normal" | "endless")) {
+    constructor(titleText: string, titleColor: string, survivedTime: number, recordKey: string, gamemode: ("normal" | "endless")) {
         super();
 
         this.hud = new HUD();
-        this.backgroundMusic.play({loop: true, volume: 0.1});
+        this.backgroundMusic.play({ loop: true, volume: 0.1 });
 
         const textStyle = new TextStyle({
             fontSize: 250,
@@ -29,7 +29,7 @@ export class GameResultScene extends AbstractScene {
 
         const title = new Text(titleText, textStyle);
         title.anchor.set(0.5);
-        title.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/4);
+        title.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4);
 
         const textStyle2 = new TextStyle({
             fontSize: 40,
@@ -45,20 +45,20 @@ export class GameResultScene extends AbstractScene {
         personalBestText.position.set(title.x, 490);
 
         const retryBtn = new Button(
-            "Retry", 
-            0xfdfff7, 
-            0x74b72e, 
+            "Retry",
+            0xfdfff7,
+            0xffe135,
             gamemode === "normal" ? this.goToGame.bind(this) : this.goToEndless.bind(this)
         );
-        retryBtn.position.set(title.x - retryBtn.width/2, 540);
+        retryBtn.position.set(title.x - retryBtn.width / 2, 540);
 
         const titleScreenBtn = new Button(
-            "Title Screen", 
-            0xfdfff7, 
-            0xd21404, 
+            "Title Screen",
+            0xfdfff7,
+            0xffe135,
             this.goToTitleScreen.bind(this)
         );
-        titleScreenBtn.position.set(title.x - titleScreenBtn.width/2, 700);
+        titleScreenBtn.position.set(title.x - titleScreenBtn.width / 2, 640);
 
         this.addChild(title);
         this.addChild(survivedTimeText);
@@ -69,25 +69,25 @@ export class GameResultScene extends AbstractScene {
     }
 
     private goToGame() {
-        if(sound.isPlaying()) {
+        if (sound.isPlaying()) {
             sound.stopAll();
         }
         SceneManager.changeScene(new GameScene());
     }
 
     private goToEndless() {
-        if(sound.isPlaying()) {
+        if (sound.isPlaying()) {
             sound.stopAll();
         }
         SceneManager.changeScene(new EndlessGameScene());
     }
 
     private goToTitleScreen() {
-        if(sound.isPlaying()) {
+        if (sound.isPlaying()) {
             sound.stopAll();
         }
         SceneManager.changeScene(new TitleScreenScene());
     }
 
-    public override update(): void {}
+    public override update(): void { }
 }

@@ -18,16 +18,16 @@ import { AbstractPowerUp } from "../game/AbstractPowerUp";
 import { MinusOnePowerUp } from "../game/MinusOnePowerUp";
 
 export class EndlessGameScene extends AbstractScene {
-    
+
     private static readonly TIME_LIMIT_MS = 60000;
     private static readonly SPAWN_TIME_MS = 3000;
     private static readonly RECORD_KEY = "endlessGameRecord";
-    private tinyPlayer : Player = new Player("Player", 500, 12);
-    private enemies : Enemy[] = [];
-    private powerUps : AbstractPowerUp[] = [];
-    private gameContainer : Container;
-    private powerUpsContainer : Container;
-    private hud : HUD;
+    private tinyPlayer: Player = new Player("Player", 500, 12);
+    private enemies: Enemy[] = [];
+    private powerUps: AbstractPowerUp[] = [];
+    private gameContainer: Container;
+    private powerUpsContainer: Container;
+    private hud: HUD;
     private timer = new Timer(EndlessGameScene.TIME_LIMIT_MS / 1000);
     private backgroundMusic = sound.find("GameMusic");
 
@@ -35,24 +35,24 @@ export class EndlessGameScene extends AbstractScene {
         super();
 
         const tutorialContainer = new TutorialContainer();
-        this.backgroundMusic.play({loop: true, volume: 0.1});
+        this.backgroundMusic.play({ loop: true, volume: 0.1 });
         this.hud = new HUD();
         this.gameContainer = new Container();
         this.powerUpsContainer = new Container();
         const spawnFloor = new SpawnFloor();
 
         this.tinyPlayer.scale.set(0.5);
-        this.tinyPlayer.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        this.tinyPlayer.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
-        this.timer.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        this.timer.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         this.timer.alpha = 0.5;
 
         this.gameContainer.addChild(this.tinyPlayer);
 
         this.spawnEnemy();
 
-        new Tween({a: 0})
-            .to({a: 1}, EndlessGameScene.SPAWN_TIME_MS)
+        new Tween({ a: 0 })
+            .to({ a: 1 }, EndlessGameScene.SPAWN_TIME_MS)
             .repeat(Infinity)
             .onRepeat(this.spawnEnemy.bind(this))
             .start();
@@ -66,54 +66,54 @@ export class EndlessGameScene extends AbstractScene {
 
         // deleting tutorial after 3s
         new Tween(tutorialContainer)
-            .to({alpha:0}, 3000)
-            .onComplete(() => {this.removeChild(tutorialContainer)}).start();
+            .to({ alpha: 0 }, 3000)
+            .onComplete(() => { this.removeChild(tutorialContainer) }).start();
 
 
         // spawning power-ups periodically
-        new Tween({b:0}).to({b:1}, 10000)
+        new Tween({ b: 0 }).to({ b: 1 }, 10000)
             .repeat(Infinity)
             .onRepeat(this.spawnMoreTimePowerUp.bind(this))
             .start();
-        new Tween({c:0}).to({c:1}, 5000)
+        new Tween({ c: 0 }).to({ c: 1 }, 5000)
             .repeat(Infinity)
             .onRepeat(this.spawnFreezePowerUp.bind(this))
             .start();
-        new Tween({c:0}).to({c:1}, 9000)
+        new Tween({ c: 0 }).to({ c: 1 }, 9000)
             .repeat(Infinity)
             .onRepeat(this.spawnMinusOnePowerUp.bind(this))
-            .start();    
+            .start();
     }
 
-    
 
-    private spawnEnemy() : void {
+
+    private spawnEnemy(): void {
         const newEnemy = new Enemy("Enemy", 300, 12);
         newEnemy.scale.set(0.75);
         this.enemies.push(newEnemy);
         this.gameContainer.addChild(newEnemy);
     }
 
-    private spawnFreezePowerUp() : void {
+    private spawnFreezePowerUp(): void {
         const newPowerUp = new FreezePowerUp(this.enemies);
         this.powerUps.push(newPowerUp);
         this.powerUpsContainer.addChild(newPowerUp);
     }
 
-    private spawnMoreTimePowerUp() : void {
+    private spawnMoreTimePowerUp(): void {
         const newPowerUp = new MoreTimePowerUp(this.timer);
         this.powerUps.push(newPowerUp);
         this.powerUpsContainer.addChild(newPowerUp);
     }
 
-    private spawnMinusOnePowerUp() : void {
+    private spawnMinusOnePowerUp(): void {
         const newPowerUp = new MinusOnePowerUp(this.enemies);
         this.powerUps.push(newPowerUp);
         this.powerUpsContainer.addChild(newPowerUp);
     }
 
-    private goToGameResultScene(titleText : string, titleColor : string, survivedTime : number) {
-        if(sound.isPlaying()) {
+    private goToGameResultScene(titleText: string, titleColor: string, survivedTime: number) {
+        if (sound.isPlaying()) {
             sound.stopAll();
         }
         SceneManager.changeScene(new GameResultScene(titleText, titleColor, survivedTime, EndlessGameScene.RECORD_KEY, "endless"));
@@ -125,22 +125,22 @@ export class EndlessGameScene extends AbstractScene {
         this.tinyPlayer.update(deltaSeconds);
 
         this.powerUps.forEach(powerUp => {
-            if(this.tinyPlayer.isColliding(powerUp)) {
+            if (this.tinyPlayer.isColliding(powerUp)) {
                 powerUp.powerUpEffect();
-                this.powerUps = this.powerUps.filter((pU) => {return pU !== powerUp;});
+                this.powerUps = this.powerUps.filter((pU) => { return pU !== powerUp; });
                 powerUp.destroy();
             }
         });
 
         this.enemies.forEach(enemy => {
             enemy.update(deltaSeconds);
-            if(this.tinyPlayer.isColliding(enemy) || this.timer.getCounter() <= 0) {
-                if(RecordManager.isRecord(EndlessGameScene.RECORD_KEY, this.timer.getSurvivedTime())) {
+            if (this.tinyPlayer.isColliding(enemy) || this.timer.getCounter() <= 0) {
+                if (RecordManager.isRecord(EndlessGameScene.RECORD_KEY, this.timer.getSurvivedTime())) {
                     RecordManager.storeRecord(EndlessGameScene.RECORD_KEY, this.timer.getSurvivedTime().toString());
                 }
-                this.goToGameResultScene("Game Ended!", "black", this.timer.getSurvivedTime());
+                this.goToGameResultScene("Game Ended!", "green", this.timer.getSurvivedTime());
             }
         });
-    
+
     }
 }

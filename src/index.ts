@@ -4,6 +4,9 @@ import { SceneManager } from "./utils/SceneManager";
 
 SceneManager.initialize();
 
+SceneManager.addLoadingScreen();
+
 initialize_assets().then(() => {
+	SceneManager.removeLoadingScreen();
 	SceneManager.changeScene(new TitleScreenScene());
 });

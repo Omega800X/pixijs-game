@@ -1,17 +1,19 @@
-import { Application, Ticker } from "pixi.js";
+import { Application, Container, Text, TextStyle, Ticker } from "pixi.js";
 import { BACKGROUND_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH } from "./constants";
 import { Keyboard } from "./Keyboard";
 import { AbstractScene } from "../scenes/AbstractScene";
 import { Group } from "tweedle.js";
 
 export namespace SceneManager {
-    let currentScene : AbstractScene;
+    let currentScene: AbstractScene;
 
-    let app : Application<HTMLCanvasElement>;
+    let app: Application<HTMLCanvasElement>;
+
+    let loadingScreen: Container;
 
     export function initialize() {
 
-        if(app != undefined) {
+        if (app != undefined) {
             console.error("Don't call initialize twice!");
             return;
         }
@@ -61,7 +63,7 @@ export namespace SceneManager {
 
     export function changeScene(newScene: AbstractScene) {
         // destroy currentScene
-        if(currentScene) {
+        if (currentScene) {
             currentScene.destroy();
         }
 
@@ -69,6 +71,28 @@ export namespace SceneManager {
         currentScene = newScene;
 
         app.stage.addChild(currentScene);
+    }
+
+    export function addLoadingScreen(): void {
+        loadingScreen = new Container();
+
+        const textStyle = new TextStyle({
+            fontSize: 250,
+        });
+
+        const loadingText = new Text("Loading...", textStyle);
+        loadingText.anchor.set(0.5);
+        loadingText.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+
+        loadingScreen.addChild(loadingText);
+
+        app.stage.addChild(loadingScreen);
+
+    }
+
+    export function removeLoadingScreen(): void {
+        app.stage.removeChild(loadingScreen);
     }
 
     function update() {
